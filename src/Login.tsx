@@ -1,37 +1,27 @@
-import { FormEvent, useState } from "react"
+import { FormEvent } from "react"
+import authService from "./auth.service"
 
-function Login() {
+type Props = {setIsLoggedIn: (val:boolean) => void}
 
-    const [token, setToken] = useState<string>()
+function Login({setIsLoggedIn}: Props) {
 
-    function sendLogin(event: FormEvent<HTMLFormElement>) {
+    async function sendLogin(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
-        fetch('http://localhost:8000/api/token/', {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => {
-            if (res.ok) {
-                return res.json()
-            } else {
-                throw new Error(`Error ${res.status}`)
-            }
-        })
-        .then(data => {
-            console.log('data', data)
-            setToken(data.access)
-        })
-        .catch(err => console.log('error', err))
-    }
+        const username = formData.get('username')?.toString()
+        const password = formData.get('password')?.toString()
 
-    function testToken() {
-        fetch('http://localhost:8000/posts/1/', {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        if (username && password) {
+            authService.login(username, password)
+                .then(res => {
+                    setIsLoggedIn(res.status === 200)
+                })
+                .catch(err => {
+                    console.log('err', err)
+                    setIsLoggedIn(false)
+                })
+
+        }
     }
 
     return (
@@ -44,7 +34,6 @@ function Login() {
                 <input type="password" name="password" id="password" />
                 <input type="submit" value="Send" />
             </form>
-            <button onClick={testToken}>Test token</button>
         </>
     )
 }
