@@ -10,6 +10,7 @@ function Root({isLoggedIn}: Props) {
                 <nav>
                     <Link to={`/`}>Main</Link>
                     <Link to={`/login`}>Login</Link>
+                    <Link to={`/posts`}>Posts</Link>
                 </nav>
                 {isLoggedIn ? <span>Logged</span> : <span>Not logged</span>}
             </header>

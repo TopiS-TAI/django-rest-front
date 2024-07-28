@@ -3,6 +3,7 @@ import Login from "./Login";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Front from "./Front";
 import Root from "./Root";
+import Posts from "./Posts";
 
 function App() {
 
@@ -20,7 +21,11 @@ function App() {
         {
           path: '/login',
           element: <Login setIsLoggedIn={setIsLoggedIn}/>,
-        }
+        },
+        {
+          path: '/posts',
+          element: <Posts/>,
+        },
       ]
     },
   ])
